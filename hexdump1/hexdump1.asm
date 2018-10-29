@@ -1,7 +1,7 @@
 ;  Executable name : hexdump1
 ;  Created date    : 29.10.2018
 ;  Author          : Janick Stucki
-;  Description
+;  Description     : prints out keyboard input and converts UPPERCASE to lowercase
 ;
 SECTION .bss			; Section containing uninitialized data
 
