@@ -12,18 +12,18 @@ SECTION .data			; Section containing initialised data
 	
 SECTION .text			; Section containing code
 
-global 	_start			; Linker needs this to find the entry point!
+GLOBAL 	_start			; Linker needs this to find the entry point!
+
+EXTERN	ReadBuff,PrintString
 	
 _start:
 	nop			; This no-op keeps gdb happy...
 
 ; Read a buffer full of text from stdin:
 Read:
-	mov eax,3		; Specify sys_read call
-	mov ebx,0		; Specify File Descriptor 0: Standard Input
-	mov ecx,Buff		; Pass offset of the buffer to read to
-	mov edx,BUFFLEN		; Pass number of bytes to read at one pass
-	int 80h			; Call sys_read to fill the buffer
+	mov eax,Buff		; Pass offset of the buffer to read to
+	mov ebx,BUFFLEN		; Pass number of bytes to read at one pass
+	call ReadBuff		; Call ReadBuff from io.asm to read Buffer
 	mov ebp,eax		; Save # of bytes read from file for later
 	cmp eax,0		; If eax=0, sys_read reached EOF on stdin
 	je Done			; Jump If Equal (to 0, from compare)
@@ -46,11 +46,9 @@ Skip:
 	jnz Loop		; when ecx is 0 we continue, else goto Loop
 
 ; Write the line of hexadecimal values to stdout:
-	mov eax,4		; Specify sys_write call
-	mov ebx,1		; Specify File Descriptor 1: Standard output
-	mov ecx,Buff		; Pass offset of line string
-	mov edx,ebp		; Pass size of the line string
-	int 80h			; Make kernel call to display line string
+	mov eax,Buff		; Specify sys_write call
+	mov ebx,ebp		; Specify File Descriptor 1: Standard output
+	call PrintString	; call PrintString from io.asm
 	jmp Read		; Loop back and load file buffer again
 
 ; All done! Let's end this party:
