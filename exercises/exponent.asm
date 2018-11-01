@@ -1,34 +1,28 @@
-; Version	: 1.0
-; Created at	: 22.10.2018
-; Author	: Janick Stucki
-; Description	: Calculate x exponent expo
+;  Executable name : Exponent procedure
+;  Version         : 1.0
+;  Created date    : 01.11.2018
+;  Author          : Janick Stucki
+;  Description     : Exponent procedure for other programs
+;  Usage           : RAX^RCX
+;  Result          : RAX
 
-section .data
-	num dd 35.0	; data double word 32bit
-	x dq 5		; number quad word
-	expo dq 3	; exponent quad word 8 bytes, 64bit
+SECTION .data			; Section containing initialised data	
+
+SECTION .bss			; Section containing uninitialized data	
+
+SECTION .text			; Section containing code
+
+global 	exponent		; Linker needs this to find the entry point!
 	
-section .bss
+exponent:
+	nop			; used for debugger
+	mov R9,RAX		; store argument in R9 (base)
+	mov RAX,1		; starting result is 1
 
-section .text
-global _start
+loop:
+	mul R9			; RAX = RAX * R9
+	dec RCX			; decrease exponent by 1
+	jnz loop		; when exponent is 0 we are done
 
-_start:
-	nop
-	xor rax,rax	; reset of rax, all bits to 0
-	mov eax,[num]	; 32bit register needed for num
-	mov r15,rax	; copy it in r15
-	nop
-	mov rbx,[x]	; number to rbx (64bit)
-	mov rcx,[expo]	; exponent to rcx
-	mov rax,1	; start with 1 as result
+	; RAX contains result of RAX^RCX
 
-Calc:
-	mul rbx		; rax = rax * rbx -> 1 * rbx
-	dec rcx		; decrease exponent by 1
-	jnz Calc	; if rcx not 0 calc again
-
-End:
-	mov rax,60	; standard exit lines
-	mov rdi,0
-	syscall
