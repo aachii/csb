@@ -56,7 +56,7 @@ Skip:
 	call PrintString	; call PrintString from io.asm
 	
 	mov eax,[Res]
-	mov ebx,20
+	mov ebx,RESLEN
 	call PrintString
 	
 	jmp Read		; Loop back and load file buffer again
