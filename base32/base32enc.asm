@@ -41,8 +41,7 @@ Loop:
 	mov al,byte [esi+edx]	; get byte from buffer with offset
 	and al,1Fh		; mask out the 5 first bits 0001 1111
 	mov bl,byte [Table+eax]	; get the matching character from data Table
-	;mov al,bl		; store this character in memory (Res)
-	mov al,"A"
+	mov al,bl		; store this character in memory (Res)
 	mov bl,RESLEN
 	call PrintString
 	
