@@ -19,7 +19,7 @@ SECTION .text			; Section of code
 GLOBAL 	_start			; Start point for linker
 	
 _start:
-	nop					; This no-op keeps gdb happy...
+	nop			; This no-op keeps gdb happy...
 	
 ; Read a buffer from stdin:
 Read:
@@ -40,8 +40,8 @@ Loop:
 	mov edx,ecx			; store offset in edx
 	
 	mov al,byte [esi+edx]	; get byte from buffer with offset
-	and al,1Fh			; mask out the 5 first bits 0001 1111
-	mov bl,byte [Table+al]	; get the matching character from data Table
+	and al,1Fh				; mask out the 5 first bits 0001 1111
+	mov bl,byte [Table+eax]	; get the matching character from data Table
 	mov byte [Res+edx],bl	; store this character in memory (Res)
 	
 	add ecx,r5			; shift to the next 5 bits
