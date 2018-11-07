@@ -50,8 +50,8 @@ Skip:
 	mov ebx,ebp		; Specify File Descriptor 1: Standard output
 	call PrintString	; call PrintString from io.asm
 	
-	mov eax,30
-	mov ebx,8
+	mov eax,30h
+	mov ebx,20
 	call PrintString
 	
 	jmp Read		; Loop back and load file buffer again
