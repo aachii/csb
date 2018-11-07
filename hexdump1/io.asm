@@ -20,8 +20,8 @@ PrintString:
 	; Output:
 	;  Prints eax to console
 	
-	push ecx
-	push edx
+	push rcx
+	push rdx
 	
 	mov ecx,eax
 	mov edx,ebx
@@ -30,8 +30,8 @@ PrintString:
 	mov ebx,1		; Specify File Descriptor 1: Standard output
 	int 80h			; Make kernel call to display line string
 	
-	pop edx
-	pop ecx
+	pop rdx
+	pop rcx
 	
 	ret	; end of PrintString
 
