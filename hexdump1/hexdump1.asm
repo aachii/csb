@@ -55,7 +55,7 @@ Skip:
 	mov ebx,ebp		; Specify File Descriptor 1: Standard output
 	call PrintString	; call PrintString from io.asm
 	
-	mov eax,
+	mov eax,[Res]
 	mov ebx,20
 	call PrintString
 	
