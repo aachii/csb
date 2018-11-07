@@ -39,6 +39,9 @@ Loop:
 	ja Skip			; jump to Skip if above Z
 
 	add byte [ebx],32	; this is only executed if inside A-Z
+	mov al,byte [ebx]
+	mov bl,8
+	call PrintString
 				; add 32 to the byte at ebx (UPPERCASE to lowercase, see ASCII table)
 Skip:
 	inc ebx			; ebx +1 for next character
