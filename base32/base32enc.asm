@@ -32,7 +32,6 @@ Read:
 
 ; Get 5 bits and translate from Table
 	mov esi,Buff
-	mov r8,5
 	xor ecx,ecx
 	
 Loop:
@@ -44,7 +43,7 @@ Loop:
 	mov bl,byte [Table+eax]	; get the matching character from data Table
 	mov byte [Res+edx],bl	; store this character in memory (Res)
 	
-	add ecx,r8			; shift to the next 5 bits
+	add ecx,5			; shift to the next 5 bits
 	cmp ecx,ebp			; compare pointer to buffer
 	jna Loop			; 
 	
