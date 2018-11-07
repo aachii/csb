@@ -19,14 +19,20 @@ PrintString:
 	;  ebx -> length of address to print
 	; Output:
 	;  Prints eax to console
-
+	
+	push ecx
+	push edx
+	
 	mov ecx,eax
 	mov edx,ebx
 
 	mov eax,4		; Specify sys_write call
 	mov ebx,1		; Specify File Descriptor 1: Standard output
 	int 80h			; Make kernel call to display line string
-
+	
+	pop edx
+	pop ecx
+	
 	ret	; end of PrintString
 
 ReadBuff:
