@@ -41,7 +41,7 @@ Loop:
 	mov al,byte [esi+edx]	; get byte from buffer with offset
 	and al,1Fh		; mask out the 5 first bits 0001 1111
 	mov bl,byte [Table+eax]	; get the matching character from data Table
-	mov eax,ebx		; store this character in memory (Res)
+	mov al,bl		; store this character in memory (Res)
 	mov ebx,RESLEN
 	call PrintString
 	
@@ -50,8 +50,8 @@ Loop:
 	jna Loop		; 
 	
 ; Prints newline to end:
-	mov eax,10		; Specify sys_write call
-	mov ebx,2		; Specify File Descriptor 1: Standard output
+	mov eax,10h		; Specify sys_write call
+	mov ebx,RESLEN		; Specify File Descriptor 1: Standard output
 	call PrintString	; call PrintString from io.asm
 	jmp Read		; Loop back and load file buffer again
 
