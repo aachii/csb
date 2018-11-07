@@ -1,21 +1,19 @@
-;  Executable name : hexdump1
-;  Created date    : 29.10.2018
+;  Executable name : base32enc
+;  Created date    : 07.11.2018
 ;  Author          : Janick Stucki
-;  Description     : prints out keyboard input and converts UPPERCASE to lowercase
+;  Description     : Encodes text to base32
 ;
-SECTION .bss			; Section containing uninitialized data
+SECTION .bss			; Section of uninitialised data
 
-	BUFFLEN	equ 16		; We read the file 16 bytes at a time
-	Buff: 	resb BUFFLEN	; Text buffer itself
+	BUFFLEN	equ 5		; read the input 5 bytes
+	Buff: 	resb BUFFLEN	; Text buffer
 	
-SECTION .data			; Section containing initialised data
+SECTION .data			; Section of initialised data
 	
-SECTION .text			; Section containing code
+SECTION .text			; Section of code
 
-GLOBAL 	_start			; Linker needs this to find the entry point!
+GLOBAL 	_start			; Start point for linker
 
-EXTERN	ReadBuff,PrintString
-	
 _start:
 	nop			; This no-op keeps gdb happy...
 
@@ -31,7 +29,7 @@ Read:
 ; Make all UPPERCASE letter lowercase (add 32dec to char-> 20h)
 	mov ebx,Buff		; ebx is Buffer address
 	mov ecx,ebp		; ecx is length of input
-	dec ebx			; ebx -1 to access last letter
+
 Loop:
 	cmp byte [ebx],41h	; compare first byte in ebx to 41h (letter A)
 	jb Skip			; jump to Skip if below A
@@ -56,3 +54,35 @@ Done:
 	mov eax,1		; Code for Exit Syscall
 	mov ebx,0		; Return a code of zero	
 	int 80H			; Make kernel call
+
+PrintString:
+	; Input:
+	;  eax -> address to print out
+	;  ebx -> length of address to print
+	; Output:
+	;  Prints eax to console
+
+	mov ecx,eax
+	mov edx,ebx
+
+	mov eax,4		; Specify sys_write call
+	mov ebx,1		; Specify File Descriptor 1: Standard output
+	int 80h			; Make kernel call to display line string
+
+	ret	; end of PrintString
+
+ReadBuff:
+	; Input:
+	;  eax -> where to read
+	;  ebx -> number of characters to read
+	; Output:
+	;  eax -> number of read input
+
+	mov ecx,eax
+	mov edx,ebx
+
+	mov eax,3		; Specify sys_read call
+	mov ebx,0		; Specify File Descriptor 0: Standard Input
+	int 80h			; Call sys_read to fill the buffer
+
+	ret	; end of ReadBuff

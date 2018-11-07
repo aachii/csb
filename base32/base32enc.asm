@@ -29,7 +29,7 @@ Read:
 ; Make all UPPERCASE letter lowercase (add 32dec to char-> 20h)
 	mov ebx,Buff		; ebx is Buffer address
 	mov ecx,ebp		; ecx is length of input
-	dec ebx			; ebx -1 to access last letter
+
 Loop:
 	cmp byte [ebx],41h	; compare first byte in ebx to 41h (letter A)
 	jb Skip			; jump to Skip if below A
