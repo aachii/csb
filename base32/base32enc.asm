@@ -32,7 +32,7 @@ Read:
 
 ; Get 5 bits and translate from Table
 	mov esi,Buff
-	mov r5,5
+	mov r8,5
 	xor ecx,ecx
 	
 Loop:
@@ -44,15 +44,15 @@ Loop:
 	mov bl,byte [Table+eax]	; get the matching character from data Table
 	mov byte [Res+edx],bl	; store this character in memory (Res)
 	
-	add ecx,r5			; shift to the next 5 bits
+	add ecx,r8			; shift to the next 5 bits
 	cmp ecx,ebp			; compare pointer to buffer
 	jna Loop			; 
 	
 ; Write the line of hexadecimal values to stdout:
-	mov eax,Buff		; Specify sys_write call
-	mov ebx,ebp			; Specify File Descriptor 1: Standard output
+	mov eax,Res		; Specify sys_write call
+	mov ebx,RESLEN		; Specify File Descriptor 1: Standard output
 	call PrintString	; call PrintString from io.asm
-	jmp Read			; Loop back and load file buffer again
+	jmp Read		; Loop back and load file buffer again
 
 ; All done! Let's end this party:
 Done:
