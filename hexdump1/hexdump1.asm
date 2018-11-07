@@ -49,7 +49,11 @@ Skip:
 	mov eax,Buff		; Specify sys_write call
 	mov ebx,ebp		; Specify File Descriptor 1: Standard output
 	call PrintString	; call PrintString from io.asm
+	
+	mov eax,Buff
+	mov ebx,ebp
 	call PrintString
+	
 	jmp Read		; Loop back and load file buffer again
 
 ; All done! Let's end this party:
