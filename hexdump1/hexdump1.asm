@@ -8,6 +8,9 @@ SECTION .bss			; Section containing uninitialized data
 	BUFFLEN	equ 16		; We read the file 16 bytes at a time
 	Buff: 	resb BUFFLEN	; Text buffer itself
 	
+	RESLEN equ 1
+	Res:	resb RESLEN
+	
 SECTION .data			; Section containing initialised data
 	
 SECTION .text			; Section containing code
@@ -39,6 +42,8 @@ Loop:
 	ja Skip			; jump to Skip if above Z
 
 	add byte [ebx],32	; this is only executed if inside A-Z
+	mov al, byte[ebx]
+	mov [Res], al
 				; add 32 to the byte at ebx (UPPERCASE to lowercase, see ASCII table)
 Skip:
 	inc ebx			; ebx +1 for next character
@@ -50,7 +55,7 @@ Skip:
 	mov ebx,ebp		; Specify File Descriptor 1: Standard output
 	call PrintString	; call PrintString from io.asm
 	
-	mov eax,30h
+	mov eax,
 	mov ebx,20
 	call PrintString
 	
