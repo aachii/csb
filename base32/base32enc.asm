@@ -1,18 +1,18 @@
-;  Executable name : hexdump1
-;  Created date    : 29.10.2018
+;  Executable name : base32enc
+;  Created date    : 07.11.2018
 ;  Author          : Janick Stucki
-;  Description     : prints out keyboard input and converts UPPERCASE to lowercase
+;  Description     : Encodes text to base32
 ;
-SECTION .bss			; Section containing uninitialized data
+SECTION .bss			; Section of uninitialised data
 
-	BUFFLEN	equ 16		; We read the file 16 bytes at a time
-	Buff: 	resb BUFFLEN	; Text buffer itself
+	BUFFLEN	equ 5		; read the input 5 bytes
+	Buff: 	resb BUFFLEN	; Text buffer
 	
-SECTION .data			; Section containing initialised data
+SECTION .data			; Section of initialised data
 	
-SECTION .text			; Section containing code
+SECTION .text			; Section of code
 
-GLOBAL 	_start			; Linker needs this to find the entry point!
+GLOBAL 	_start			; Start point for linker
 
 EXTERN	ReadBuff,PrintString
 	
