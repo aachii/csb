@@ -36,43 +36,44 @@ Read:
 	mov cl,35		; start of first 5 bits
 	
 	mov al,byte [Buff]	; load 40 bits of data in rax
+	shl rax,8		; get the first 8 then shift by 8
+	mov al,byte [Buff+1]	; get the second 8
+	shl rax,8		; shift by 8
+	mov al,byte [Buff+2]	; get the third 8
+	shl rax,8		; shift by 8
+	mov al,byte [Buff+3]	; ...
 	shl rax,8
-	mov al,byte [Buff+1]
-	shl rax,8
-	mov al,byte [Buff+2]
-	shl rax,8
-	mov al,byte [Buff+3]
-	shl rax,8
-	mov al,byte [Buff+4]
+	mov al,byte [Buff+4]	; get the fifth 8, no more shift needed
 	
 	mov rdx,rax		; store loaded bits to rdx
 	mov rbx, 0x1F		; set 5 bit mask 0001 1111
+
+; Store the int value of the 5 pair bits in Result
+Storebits:
+	mov rax,rdx		; keep a backup of the read buffer
+	shr rax,cl		; shift to get 5 bits, cl-5 every loop
+	and rax,rbx		; mask with 0001 1111 to kill high bits, only want 5
+	mov byte [Result+rdi],al	; store in Result (rdi is offset, +1 each loop)
 	
-Loop:
-	mov rax,rdx
-	shr rax,cl
-	and rax,rbx
-	mov byte [Result+rdi],al
+	inc rdi			; offset to store Result
+	sub cl,5		; position of next 5 bit group is 5 less
 	
-	inc rdi
-	sub cl,5
+	cmp rdi,7		; after 8 bytes we are done
+	jna Storebits		; loop if not above 7
 	
-	cmp rdi,7
-	jna Loop
-	
-	xor rsi,rsi
+	xor rsi,rsi		; clear rsi
 	
 Translate:
-	xor rbx,rbx
-	xor rcx,rcx
+	xor rbx,rbx		; clear rbx and rcx
+	xor rcx,rcx		; used for temp storage
 	
-	mov bl, byte [Result+rsi]
-	mov cl, byte [Table+rbx]
-	mov byte [Result+rsi],cl
+	mov bl, byte [Result+rsi]	; get the first number from Result in bl
+	mov cl, byte [Table+rbx]	; translate the first number from Table into cl
+	mov byte [Result+rsi],cl	; put cl to Result
 	
-	inc rsi
-	cmp rsi,7
-	jna Translate
+	inc rsi			; increase rsi for next Result value
+	cmp rsi,7		; same as above, exactly 8 rounds needed
+	jna Translate		; loop if not yet completed
 	
 ; print out the result
 	mov rax,Result		; Specify sys_write call
@@ -82,14 +83,6 @@ Translate:
 	
 ; Exit
 Done:
-	mov  dl, 0x0d     ; put CR into dl
-   	mov  ah, 2        ; ah=2 - "print character" sub-function
-   	int  0x21         ; call dos services
-
-   	mov  dl, 0x0a     ; put LF into dl
-   	mov  ah, 2        ; ah=2 - "print character" sub-function
-    	int  0x21
-
 	mov rax,1		; Code for Exit Syscall
 	mov rbx,0		; Return a code of zero	
 	int 0x80		; Make kernel call
