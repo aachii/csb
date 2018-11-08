@@ -12,7 +12,7 @@ SECTION .data			; Section of initialised data
 	TABLELEN equ $-Table
 	; 5 bits from input is the offset in data for base32
 	Result dq '0'
-	prompt byte '0',13, 10, 0
+	carriageReturn BYTE ' ', 13, 10, 0
 	
 SECTION .text			; Section of code
 	
@@ -83,7 +83,7 @@ Translate:
 	
 ; Exit
 Done:
-	mov rax,prompt		; print new line CR LF
+	mov rax,carriageReturn	; print new line CR LF
 	mov rbx,1
 	call PrintString
 
