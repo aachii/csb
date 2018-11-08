@@ -23,60 +23,63 @@ _start:
 	
 ; Read a buffer from stdin:
 Read:
-	mov eax,Buff		; Offset of Buffer to eax
-	mov ebx,BUFFLEN		; Number of bytes to read to ebx
+	mov rax,Buff		; Offset of Buffer to eax
+	mov rbx,BUFFLEN		; Number of bytes to read to ebx
 	call ReadBuff		; Call ReadBuff
-	mov ebp,eax		; Save # of bytes read from file for later
-	cmp eax,0		; If eax=0, sys_read reached EOF on stdin
+	mov rbp,rax		; Save # of bytes read from file for later
+	cmp rax,0		; If eax=0, sys_read reached EOF on stdin
 	je Done			; Jump If Equal (to 0, from compare)
 
-; Get 5 bits and translate from Table
-	mov esi,Buff
-	xor ecx,ecx
+; Get 5 bytes and translate from Table
+	mov rsi,Buff
+	xor rcx,rcx
 	
 Loop:
-	xor eax,eax		; clear eax
-	mov edx,ecx
+	xor rax,rax		; clear eax
+	mov rax,Buff
+	mov rbx, 0x1F
+	shr
 	
-	mov al,byte [esi+ecx]	; get byte from buffer with offset
-	shr al,3
-	sub esi,3
-	and al,1Fh		; mask out the 5 first bits
-	mov bl,byte [Table+eax]	; get the matching character from data Table
-	mov byte [Res+edx], bl	; put character to Res in memory
 	
-	add ecx,1		; shift to the next byte
-	cmp ecx,ebp		; compare pointer to buffer
+	;mov al,byte [rsi+rcx]	; get byte from buffer with offset
+	;shr al,3
+	;sub rsi,3
+	;and al,1Fh		; mask out the 5 first bits
+	;mov bl,byte [Table+rax]; get the matching character from data Table
+	;mov byte [Res+rcx], bl	; put character to Res in memory
+	
+	add rcx,1		; shift to the next byte
+	cmp rcx,ebp		; compare pointer to buffer
 	jna Loop		; 
 	
-; Prints newline to end:
-	mov eax,Res		; Specify sys_write call
-	mov ebx,RESLEN		; Specify File Descriptor 1: Standard output
+; print out the result
+	mov rax,Res		; Specify sys_write call
+	mov rbx,RESLEN		; Specify File Descriptor 1: Standard output
 	call PrintString	; call PrintString
 	jmp Read		; Loop back and load file buffer again
 	
-; Exit:
+; Exit
 Done:
-	mov eax,1		; Code for Exit Syscall
-	mov ebx,0		; Return a code of zero	
-	int 80H			; Make kernel call
+	mov rax,1		; Code for Exit Syscall
+	mov rbx,0		; Return a code of zero	
+	int 0x80		; Make kernel call
 
 PrintString:
 	; Input:
-	;  eax -> address to print out
-	;  ebx -> length of address to print
+	;  rax -> address to print out
+	;  rbx -> length of address to print
 	; Output:
 	;  Prints eax to console
 	
 	push rcx
 	push rdx
 	
-	mov ecx,eax
-	mov edx,ebx
+	mov rcx,rax
+	mov rdx,rbx
 	
-	mov eax,4		; Specify sys_write call
-	mov ebx,1		; Specify File Descriptor 1: Standard output
-	int 80h			; Make kernel call to display line string
+	mov rax,4		; Specify sys_write call
+	mov rbx,1		; Specify File Descriptor 1: Standard output
+	int 0x80		; Make kernel call to display line string
 	
 	pop rdx
 	pop rcx
@@ -85,16 +88,16 @@ PrintString:
 
 ReadBuff:
 	; Input:
-	;  eax -> where to read
-	;  ebx -> number of characters to read
+	;  rax -> where to read
+	;  rbx -> number of characters to read
 	; Output:
-	;  eax -> number of read input
+	;  rax -> number of read input
 
-	mov ecx,eax
-	mov edx,ebx
+	mov rcx,rax
+	mov rdx,rbx
 
-	mov eax,3		; Specify sys_read call
-	mov ebx,0		; Specify File Descriptor 0: Standard Input
-	int 80h			; Call sys_read to fill the buffer
+	mov rax,3		; Specify sys_read call
+	mov rbx,0		; Specify File Descriptor 0: Standard Input
+	int 0x80		; Call sys_read to fill the buffer
 
 	ret	; end of ReadBuff
