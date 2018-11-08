@@ -12,7 +12,6 @@ SECTION .data			; Section of initialised data
 	TABLELEN equ $-Table
 	; 5 bits from input is the offset in data for base32
 	Result dq '0'
-	carriageReturn BYTE ' ', 13, 10, 0
 	
 SECTION .text			; Section of code
 	
@@ -83,9 +82,13 @@ Translate:
 	
 ; Exit
 Done:
-	mov rax,carriageReturn	; print new line CR LF
-	mov rbx,1
-	call PrintString
+	mov  dl, 0x0d     ; put CR into dl
+   	mov  ah, 2        ; ah=2 - "print character" sub-function
+   	int  0x21         ; call dos services
+
+   	mov  dl, 0x0a     ; put LF into dl
+   	mov  ah, 2        ; ah=2 - "print character" sub-function
+    	int  0x21
 
 	mov rax,1		; Code for Exit Syscall
 	mov rbx,0		; Return a code of zero	
