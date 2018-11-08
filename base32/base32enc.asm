@@ -84,6 +84,10 @@ Translate:
 	
 ; Exit
 Done:
+	mov rax,10		; print new line
+	mov rbx,1
+	call PrintString
+
 	mov rax,1		; Code for Exit Syscall
 	mov rbx,0		; Return a code of zero	
 	int 0x80		; Make kernel call
