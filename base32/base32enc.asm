@@ -32,16 +32,16 @@ Read:
 
 ; Get 5 bytes and translate from Table
 	xor rcx,rcx
-	mov dl,35		; start of first 5 bits
+	mov di,35		; start of first 5 bits
 	
 Loop:	
 	mov rax,Buff
 	mov rbx, 0x1F
-	shr rax,dl
+	shr rax,di
 	and rax,rbx
 	mov [Res+rcx],al
 	inc rcx
-	sub dl,5
+	sub di,5
 	
 	cmp rcx,rbp		; compare pointer to buffer
 	jna Loop		; 
