@@ -38,7 +38,7 @@ Loop:
 	xor rax,rax		; clear eax
 	mov rax,Buff
 	mov rbx, 0x1F
-	shr
+	
 	
 	
 	;mov al,byte [rsi+rcx]	; get byte from buffer with offset
@@ -49,7 +49,7 @@ Loop:
 	;mov byte [Res+rcx], bl	; put character to Res in memory
 	
 	add rcx,1		; shift to the next byte
-	cmp rcx,ebp		; compare pointer to buffer
+	cmp rcx,rbp		; compare pointer to buffer
 	jna Loop		; 
 	
 ; print out the result
