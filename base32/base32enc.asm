@@ -69,7 +69,7 @@ Translate:
 	xor rcx,rcx
 	
 	mov bl, byte [Result+rsi]
-	mov cl, byte [Table+bl]
+	mov cl, byte [Table+rbx]
 	mov byte [Result+rsi],cl
 	
 	inc rsi
