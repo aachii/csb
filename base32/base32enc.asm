@@ -38,7 +38,7 @@ Read:
 Loop:	
 	mov rax,Buff
 	mov rbx, 0x1F
-	shr rax,di
+	shr rax,cl
 	and rax,rbx
 	mov [Res+rdi],al
 	inc rcx
