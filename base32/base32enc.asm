@@ -47,9 +47,9 @@ Read:
 	mov al,byte [Buff+4]
 	
 	mov rdx,rax		; store loaded bits to rdx
+	mov rbx, 0x1F		; set 5 bit mask 0001 1111
 	
 	mov rax,rdx
-	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
 	mov byte [Res+rdi],al
@@ -57,7 +57,6 @@ Read:
 	sub cl,5
 	
 	mov rax,rdx
-	mov rbx, 0x1F
 	shl rax,cl
 	and rax,rbx
 	mov byte [Res+rdi],al
@@ -65,7 +64,6 @@ Read:
 	sub cl,5
 	
 	mov rax,rdx
-	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
 	mov byte [Res+rdi],al
@@ -73,7 +71,6 @@ Read:
 	sub cl,5
 	
 	mov rax,rdx
-	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
 	mov byte [Res+rdi],al
@@ -81,7 +78,6 @@ Read:
 	sub cl,5
 	
 	mov rax,rdx
-	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
 	mov byte [Res+rdi],al
@@ -89,7 +85,6 @@ Read:
 	sub cl,5
 	
 	mov rax,rdx
-	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
 	mov byte [Res+rdi],al
@@ -97,7 +92,6 @@ Read:
 	sub cl,5
 	
 	mov rax,rdx
-	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
 	mov byte [Res+rdi],al
@@ -105,7 +99,6 @@ Read:
 	sub cl,5
 	
 	mov rax,rdx
-	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
 	mov byte [Res+rdi],al
