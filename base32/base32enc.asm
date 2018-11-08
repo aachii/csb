@@ -57,7 +57,7 @@ Read:
 	sub cl,5
 	
 	mov rax,rdx
-	shl rax,cl
+	shr rax,cl
 	and rax,rbx
 	mov byte [Res+rdi],al
 	inc rdi
