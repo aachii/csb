@@ -38,7 +38,7 @@ Loop:
 	xor rax,rax		; clear eax
 	mov rax,Buff
 	mov rbx, 0x1F
-	
+	and rax,rbx
 	
 	
 	;mov al,byte [rsi+rcx]	; get byte from buffer with offset
