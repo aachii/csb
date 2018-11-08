@@ -50,61 +50,31 @@ Read:
 	mov rdx,rax		; store loaded bits to rdx
 	mov rbx, 0x1F		; set 5 bit mask 0001 1111
 	
+Loop:
 	mov rax,rdx
 	shr rax,cl
 	and rax,rbx
 	mov byte [Result+rdi],al
+	
 	inc rdi
 	sub cl,5
 	
-	mov rax,rdx
-	shr rax,cl
-	and rax,rbx
-	mov byte [Result+rdi],al
-	inc rdi
-	sub cl,5
+	cmp rdi,rbp
+	jna Loop
 	
-	mov rax,rdx
-	shr rax,cl
-	and rax,rbx
-	mov byte [Result+rdi],al
-	inc rdi
-	sub cl,5
+	xor rsi,rsi
 	
-	mov rax,rdx
-	shr rax,cl
-	and rax,rbx
-	mov byte [Result+rdi],al
-	inc rdi
-	sub cl,5
+Translate:
+	xor rbx,rbx
+	xor rcx,rcx
 	
-	mov rax,rdx
-	shr rax,cl
-	and rax,rbx
-	mov byte [Result+rdi],al
-	inc rdi
-	sub cl,5
+	mov bl, byte [Result+rsi]
+	mov cl, byte [Table+bl]
+	mov byte [Result+rsi],cl
 	
-	mov rax,rdx
-	shr rax,cl
-	and rax,rbx
-	mov byte [Result+rdi],al
-	inc rdi
-	sub cl,5
-	
-	mov rax,rdx
-	shr rax,cl
-	and rax,rbx
-	mov byte [Result+rdi],al
-	inc rdi
-	sub cl,5
-	
-	mov rax,rdx
-	shr rax,cl
-	and rax,rbx
-	mov byte [Result+rdi],al
-	inc rdi
-	sub cl,5
+	inc rsi
+	cmp rsi,8
+	jna Translate
 	
 ; print out the result
 	mov rax,Result		; Specify sys_write call
