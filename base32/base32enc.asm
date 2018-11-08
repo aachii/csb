@@ -52,7 +52,7 @@ Read:
 	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
-	mov [Res+rdi],al
+	mov byte [Res+rdi],al
 	inc rdi
 	sub cl,5
 	
@@ -60,7 +60,7 @@ Read:
 	mov rbx, 0x1F
 	shl rax,cl
 	and rax,rbx
-	mov [Res+rdi],al
+	mov byte [Res+rdi],al
 	inc rdi
 	sub cl,5
 	
@@ -68,7 +68,7 @@ Read:
 	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
-	mov [Res+rdi],al
+	mov byte [Res+rdi],al
 	inc rdi
 	sub cl,5
 	
@@ -76,7 +76,7 @@ Read:
 	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
-	mov [Res+rdi],al
+	mov byte [Res+rdi],al
 	inc rdi
 	sub cl,5
 	
@@ -84,7 +84,7 @@ Read:
 	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
-	mov [Res+rdi],al
+	mov byte [Res+rdi],al
 	inc rdi
 	sub cl,5
 	
@@ -92,7 +92,7 @@ Read:
 	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
-	mov [Res+rdi],al
+	mov byte [Res+rdi],al
 	inc rdi
 	sub cl,5
 	
@@ -100,7 +100,7 @@ Read:
 	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
-	mov [Res+rdi],al
+	mov byte [Res+rdi],al
 	inc rdi
 	sub cl,5
 	
@@ -108,7 +108,7 @@ Read:
 	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
-	mov [Res+rdi],al
+	mov byte [Res+rdi],al
 	inc rdi
 	sub cl,5
 	
