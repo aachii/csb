@@ -73,7 +73,7 @@ Translate:
 	mov byte [Result+rsi],cl
 	
 	inc rsi
-	cmp rsi,8
+	cmp rsi,7
 	jna Translate
 	
 ; print out the result
