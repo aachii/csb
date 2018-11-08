@@ -12,7 +12,7 @@ SECTION .data			; Section of initialised data
 	TABLELEN equ $-Table
 	; 5 bits from input is the offset in data for base32
 	Result dq '0'
-	prompt BYTE '',13, 10, 0
+	prompt byte '0',13, 10, 0
 	
 SECTION .text			; Section of code
 	
