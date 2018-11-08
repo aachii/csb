@@ -36,17 +36,17 @@ Read:
 	xor rcx,rcx
 	mov cl,35		; start of first 5 bits
 	
-Loop:	
+	mov al,byte [Buff]	; load 40 bits of data in rax
+	shl rax,8
 	mov al,byte [Buff]
-	shl al,8
+	shl rax,8
 	mov al,byte [Buff]
-	shl al,8
+	shl rax,8
 	mov al,byte [Buff]
-	shl al,8
+	shl rax,8
 	mov al,byte [Buff]
-	shl al,8
-	mov al,byte [Buff]	
 	
+Loop:	
 	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
