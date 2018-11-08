@@ -6,14 +6,13 @@
 SECTION .bss			; Section of uninitialised data
 	BUFFLEN	equ 5		; read the input 5 bytes
 	Buff: resb BUFFLEN	; Text buffer
-	RESLEN equ 8
-	Res: resb RESLEN
 	
 SECTION .data			; Section of initialised data
 	Table: db "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
 	TABLELEN equ $-Table
 	; 5 bits from input is the offset in data for base32
 	Result dq '0'
+	prompt BYTE 13, 10, 0
 	
 SECTION .text			; Section of code
 	
@@ -84,10 +83,8 @@ Translate:
 	
 ; Exit
 Done:
+	mov rax,prompt		; print new line CR LF
 	mov rbx,1
-	mov rax,13		; print new line CR LF
-	call PrintString
-	mov rax,10
 	call PrintString
 
 	mov rax,1		; Code for Exit Syscall
