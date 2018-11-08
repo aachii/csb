@@ -6,8 +6,8 @@
 SECTION .bss			; Section of uninitialised data
 	BUFFLEN	equ 5		; read the input 5 bytes
 	Buff: resb BUFFLEN	; Text buffer
-	RESLEN equ 1		; Result length of 1 byte
-	Res: resb RESLEN	; Result variable
+	RESLEN equ 10
+	Res: resb RESLEN
 	
 SECTION .data			; Section of initialised data
 	Table: db "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
@@ -41,18 +41,16 @@ Loop:
 	mov al,byte [esi+edx]	; get byte from buffer with offset
 	and al,1Fh		; mask out the 5 first bits 0001 1111
 	mov bl,byte [Table+eax]	; get the matching character from data Table
-	mov al,bl		; store this character in memory (Res)
-	mov bl,RESLEN
-	call PrintString
+	mov byte [Res+ecx], bl
 	
-	add ecx,5		; shift to the next 5 bits
+	add ecx,1		; shift to the next byte
 	cmp ecx,ebp		; compare pointer to buffer
 	jna Loop		; 
 	
 ; Prints newline to end:
-	mov eax,0Ah		; Specify sys_write call
+	mov eax,[Res]		; Specify sys_write call
 	mov ebx,RESLEN		; Specify File Descriptor 1: Standard output
-	call PrintString	; call PrintString from io.asm
+	call PrintString	; call PrintString
 	jmp Read		; Loop back and load file buffer again
 
 ; Exit:
