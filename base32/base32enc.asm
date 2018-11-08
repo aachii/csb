@@ -84,8 +84,10 @@ Translate:
 	
 ; Exit
 Done:
-	mov rax,10		; print new line
 	mov rbx,1
+	mov rax,13		; print new line CR LF
+	call PrintString
+	mov rax,10
 	call PrintString
 
 	mov rax,1		; Code for Exit Syscall
