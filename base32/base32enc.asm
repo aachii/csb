@@ -38,24 +38,79 @@ Read:
 	
 	mov al,byte [Buff]	; load 40 bits of data in rax
 	shl rax,8
-	mov al,byte [Buff]
+	mov al,byte [Buff+1]
 	shl rax,8
-	mov al,byte [Buff]
+	mov al,byte [Buff+2]
 	shl rax,8
-	mov al,byte [Buff]
+	mov al,byte [Buff+3]
 	shl rax,8
-	mov al,byte [Buff]
+	mov al,byte [Buff+4]
 	
-Loop:	
+	mov rdx,rax		; store loaded bits to rdx
+	
+	mov rax,rdx
 	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
 	mov [Res+rdi],al
-	inc rcx
+	inc rdi
 	sub cl,5
 	
-	cmp rcx,rbp		; compare pointer to buffer
-	jna Loop		; 
+	mov rax,rdx
+	mov rbx, 0x1F
+	shl rax,cl
+	and rax,rbx
+	mov [Res+rdi],al
+	inc rdi
+	sub cl,5
+	
+	mov rax,rdx
+	mov rbx, 0x1F
+	shr rax,cl
+	and rax,rbx
+	mov [Res+rdi],al
+	inc rdi
+	sub cl,5
+	
+	mov rax,rdx
+	mov rbx, 0x1F
+	shr rax,cl
+	and rax,rbx
+	mov [Res+rdi],al
+	inc rdi
+	sub cl,5
+	
+	mov rax,rdx
+	mov rbx, 0x1F
+	shr rax,cl
+	and rax,rbx
+	mov [Res+rdi],al
+	inc rdi
+	sub cl,5
+	
+	mov rax,rdx
+	mov rbx, 0x1F
+	shr rax,cl
+	and rax,rbx
+	mov [Res+rdi],al
+	inc rdi
+	sub cl,5
+	
+	mov rax,rdx
+	mov rbx, 0x1F
+	shr rax,cl
+	and rax,rbx
+	mov [Res+rdi],al
+	inc rdi
+	sub cl,5
+	
+	mov rax,rdx
+	mov rbx, 0x1F
+	shr rax,cl
+	and rax,rbx
+	mov [Res+rdi],al
+	inc rdi
+	sub cl,5
 	
 ; print out the result
 	mov rax,Res		; Specify sys_write call
