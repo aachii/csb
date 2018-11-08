@@ -6,7 +6,7 @@
 SECTION .bss			; Section of uninitialised data
 	BUFFLEN	equ 5		; read the input 5 bytes
 	Buff: resb BUFFLEN	; Text buffer
-	RESLEN equ 10
+	RESLEN equ 8
 	Res: resb RESLEN
 	
 SECTION .data			; Section of initialised data
@@ -36,23 +36,25 @@ Read:
 	
 Loop:
 	xor eax,eax		; clear eax
-	mov edx,ecx		; store offset in edx
+	mov edx,ecx
 	
-	mov al,byte [esi+edx]	; get byte from buffer with offset
-	and al,1Fh		; mask out the 5 first bits 0001 1111
+	mov al,byte [esi+ecx]	; get byte from buffer with offset
+	shr al,3
+	sub esi,3
+	and al,1Fh		; mask out the 5 first bits
 	mov bl,byte [Table+eax]	; get the matching character from data Table
-	mov byte [Res+ecx], bl
+	mov byte [Res+edx], bl	; put character to Res in memory
 	
 	add ecx,1		; shift to the next byte
 	cmp ecx,ebp		; compare pointer to buffer
 	jna Loop		; 
 	
 ; Prints newline to end:
-	mov eax,[Res]		; Specify sys_write call
+	mov eax,Res		; Specify sys_write call
 	mov ebx,RESLEN		; Specify File Descriptor 1: Standard output
 	call PrintString	; call PrintString
 	jmp Read		; Loop back and load file buffer again
-
+	
 ; Exit:
 Done:
 	mov eax,1		; Code for Exit Syscall
