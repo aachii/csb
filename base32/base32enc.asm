@@ -31,17 +31,18 @@ Read:
 	je Done			; Jump If Equal (to 0, from compare)
 
 ; Get 5 bytes and translate from Table
+	xor rdi,rdi
 	xor rcx,rcx
-	mov di,35		; start of first 5 bits
+	mov cl,35		; start of first 5 bits
 	
 Loop:	
 	mov rax,Buff
 	mov rbx, 0x1F
 	shr rax,di
 	and rax,rbx
-	mov [Res+rcx],al
+	mov [Res+rdi],al
 	inc rcx
-	sub di,5
+	sub cl,5
 	
 	cmp rcx,rbp		; compare pointer to buffer
 	jna Loop		; 
