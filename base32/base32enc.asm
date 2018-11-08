@@ -13,6 +13,7 @@ SECTION .data			; Section of initialised data
 	Table: db "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
 	TABLELEN equ $-Table
 	; 5 bits from input is the offset in data for base32
+	Result dq '0'
 	
 SECTION .text			; Section of code
 	
@@ -52,62 +53,62 @@ Read:
 	mov rax,rdx
 	shr rax,cl
 	and rax,rbx
-	mov byte [Res+rdi],al
+	mov byte [Result+rdi],al
 	inc rdi
 	sub cl,5
 	
 	mov rax,rdx
 	shr rax,cl
 	and rax,rbx
-	mov byte [Res+rdi],al
+	mov byte [Result+rdi],al
 	inc rdi
 	sub cl,5
 	
 	mov rax,rdx
 	shr rax,cl
 	and rax,rbx
-	mov byte [Res+rdi],al
+	mov byte [Result+rdi],al
 	inc rdi
 	sub cl,5
 	
 	mov rax,rdx
 	shr rax,cl
 	and rax,rbx
-	mov byte [Res+rdi],al
+	mov byte [Result+rdi],al
 	inc rdi
 	sub cl,5
 	
 	mov rax,rdx
 	shr rax,cl
 	and rax,rbx
-	mov byte [Res+rdi],al
+	mov byte [Result+rdi],al
 	inc rdi
 	sub cl,5
 	
 	mov rax,rdx
 	shr rax,cl
 	and rax,rbx
-	mov byte [Res+rdi],al
+	mov byte [Result+rdi],al
 	inc rdi
 	sub cl,5
 	
 	mov rax,rdx
 	shr rax,cl
 	and rax,rbx
-	mov byte [Res+rdi],al
+	mov byte [Result+rdi],al
 	inc rdi
 	sub cl,5
 	
 	mov rax,rdx
 	shr rax,cl
 	and rax,rbx
-	mov byte [Res+rdi],al
+	mov byte [Result+rdi],al
 	inc rdi
 	sub cl,5
 	
 ; print out the result
-	mov rax,Res		; Specify sys_write call
-	mov rbx,RESLEN		; Specify File Descriptor 1: Standard output
+	mov rax,Result		; Specify sys_write call
+	mov rbx,8		; Specify File Descriptor 1: Standard output
 	call PrintString	; call PrintString
 	jmp Read		; Loop back and load file buffer again
 	
