@@ -32,11 +32,21 @@ Read:
 
 ; Get 5 bytes and translate from Table
 	xor rdi,rdi
+	xor rax,rax
 	xor rcx,rcx
 	mov cl,35		; start of first 5 bits
 	
 Loop:	
-	mov rax,Buff
+	mov al,byte [Buff]
+	shl al,8
+	mov al,byte [Buff]
+	shl al,8
+	mov al,byte [Buff]
+	shl al,8
+	mov al,byte [Buff]
+	shl al,8
+	mov al,byte [Buff]	
+	
 	mov rbx, 0x1F
 	shr rax,cl
 	and rax,rbx
