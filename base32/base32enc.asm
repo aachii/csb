@@ -31,24 +31,18 @@ Read:
 	je Done			; Jump If Equal (to 0, from compare)
 
 ; Get 5 bytes and translate from Table
-	mov rsi,Buff
+	mov r8,35		; start of first 5 bits
 	xor rcx,rcx
 	
-Loop:
-	xor rax,rax		; clear eax
+Loop:	
 	mov rax,Buff
 	mov rbx, 0x1F
+	shr rax,r8
 	and rax,rbx
+	mov [Res+rcx],al
+	inc rcx
+	sub r8,5
 	
-	
-	;mov al,byte [rsi+rcx]	; get byte from buffer with offset
-	;shr al,3
-	;sub rsi,3
-	;and al,1Fh		; mask out the 5 first bits
-	;mov bl,byte [Table+rax]; get the matching character from data Table
-	;mov byte [Res+rcx], bl	; put character to Res in memory
-	
-	add rcx,1		; shift to the next byte
 	cmp rcx,rbp		; compare pointer to buffer
 	jna Loop		; 
 	
