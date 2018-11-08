@@ -59,7 +59,7 @@ Loop:
 	inc rdi
 	sub cl,5
 	
-	cmp rdi,rbp
+	cmp rdi,7
 	jna Loop
 	
 	xor rsi,rsi
