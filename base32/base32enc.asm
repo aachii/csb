@@ -45,7 +45,7 @@ Getbuff:
 Cont:
 	shl rax,8		; get the first 8 then shift by 8
 	inc rsi
-	cmp rsi,5
+	cmp rsi,4
 	jb Getbuff
 	
 	mov rdx,rax		; keep a backup of the read buffer
