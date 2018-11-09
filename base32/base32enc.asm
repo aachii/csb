@@ -68,6 +68,17 @@ Storebits:
 	
 	xor rsi,rsi		; clear rsi
 	
+	cmp r8,4		; 4 empty bytes at end
+	je Equiv1
+	cmp r8,3
+	je Equiv3
+	cmp r8,2
+	je Equiv4
+	cmp r8,1
+	je Equiv6
+	
+	mov r8,7	
+	
 Translate:
 	xor rbx,rbx		; clear rbx and rcx
 	xor rcx,rcx		; used for temp storage
@@ -87,8 +98,18 @@ Translate:
 	jmp Read		; Loop back and load file buffer again
 	
 ; end of input cases for =
-Equiv:
-	jmp Cont		; go back
+Equiv1:
+	
+	jmp Translate		; go back
+Equiv3:
+	
+	jmp Translate		; go back
+Equiv4:
+	
+	jmp Translate		; go back
+Equiv6:
+	
+	jmp Translate		; go back
 
 ; Exit
 Done:
