@@ -53,6 +53,11 @@ Read:
 Storebits:
 	mov rax,rdx		; keep a backup of the read buffer
 	shr rax,cl		; shift to get 5 bits, cl-5 every loop
+	
+	cmp al,0
+	ja Cont
+	inc r8
+Cont:
 	and rax,rbx		; mask with 0001 1111 to kill high bits, only want 5
 	mov byte [Result+rdi],al	; store in Result (rdi is offset, +1 each loop)
 	
@@ -70,12 +75,6 @@ Translate:
 	
 	mov bl, byte [Result+rsi]	; get the first number from Result in bl
 	mov cl, byte [Table+rbx]	; translate the first number from Table into cl
-	
-	cmp cl,0
-	ja Cont
-	inc r8
-	
-Cont:
 	mov byte [Result+rsi],cl	; put cl to Result
 	
 	inc rsi			; increase rsi for next Result value
