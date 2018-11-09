@@ -38,21 +38,22 @@ Read:
 	
 Getbuff:	
 	mov al,byte [Buff+rsi]	; load 40 bits of data in rax
-	shl rax,8		; get the first 8 then shift by 8
 	cmp al,0		; check if byte is 0000 0000
 	ja Cont			; if not continue
 	inc r8			; count up if read byte is 0
 Cont:
+	shl rax,8		; get the first 8 then shift by 8
 	inc rsi
 	cmp rsi,4
 	jb Getbuff
 	
+	mov rdx,rax		; keep a backup of the read buffer
 	mov rbx, 0x1F		; set 5 bit mask 0001 1111
 	xor rdi,rdi
 
 ; Store the int value of the 5 pair bits in Result
 Storebits:
-	mov rax,rdx		; keep a backup of the read buffer
+	mov rax,rdx		; get the read buffer for working
 	shr rax,cl		; shift to get 5 bits, cl-5 every loop
 	and rax,rbx		; mask with 0001 1111 to kill high bits, only want 5
 	
