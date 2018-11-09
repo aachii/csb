@@ -30,6 +30,7 @@ Read:
 	je Done			; Jump If Equal (to 0, from compare)
 
 ; Get 5 bytes and translate from Table
+	xor rsi,rsi
 	xor rdi,rdi
 	xor rax,rax
 	xor rcx,rcx
