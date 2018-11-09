@@ -47,6 +47,7 @@ Read:
 	
 	mov rdx,rax		; store loaded bits to rdx
 	mov rbx, 0x1F		; set 5 bit mask 0001 1111
+	xor r8,r8		; count up later when character is 00 (end of input)
 
 ; Store the int value of the 5 pair bits in Result
 Storebits:
@@ -69,6 +70,12 @@ Translate:
 	
 	mov bl, byte [Result+rsi]	; get the first number from Result in bl
 	mov cl, byte [Table+rbx]	; translate the first number from Table into cl
+	
+	cmp cl,0
+	ja Cont
+	inc r8
+	
+Cont:
 	mov byte [Result+rsi],cl	; put cl to Result
 	
 	inc rsi			; increase rsi for next Result value
@@ -81,6 +88,10 @@ Translate:
 	call PrintString	; call PrintString
 	jmp Read		; Loop back and load file buffer again
 	
+; end of input cases for =
+Equiv:
+	jmp Cont		; go back
+
 ; Exit
 Done:
 	mov rax,1		; Code for Exit Syscall
