@@ -33,32 +33,29 @@ Read:
 	xor rdi,rdi
 	xor rax,rax
 	xor rcx,rcx
+	xor r8,r8		; count up later when character is 00 (end of input)
 	mov cl,35		; start of first 5 bits
 	
-	mov al,byte [Buff]	; load 40 bits of data in rax
+Getbuff:	
+	mov al,byte [Buff+rsi]	; load 40 bits of data in rax
 	shl rax,8		; get the first 8 then shift by 8
-	mov al,byte [Buff+1]	; get the second 8
-	shl rax,8		; shift by 8
-	mov al,byte [Buff+2]	; get the third 8
-	shl rax,8		; shift by 8
-	mov al,byte [Buff+3]	; ...
-	shl rax,8
-	mov al,byte [Buff+4]	; get the fifth 8, no more shift needed
+	cmp al,0		; check if byte is 0000 0000
+	ja Cont			; if not continue
+	inc r8			; count up if read byte is 0
+Cont:
+	inc rsi
+	cmp rsi,4
+	jb Getbuff
 	
-	mov rdx,rax		; store loaded bits to rdx
 	mov rbx, 0x1F		; set 5 bit mask 0001 1111
-	xor r8,r8		; count up later when character is 00 (end of input)
+	xor rdi,rdi
 
 ; Store the int value of the 5 pair bits in Result
 Storebits:
 	mov rax,rdx		; keep a backup of the read buffer
 	shr rax,cl		; shift to get 5 bits, cl-5 every loop
-	
-	cmp al,0
-	ja Cont
-	inc r8
-Cont:
 	and rax,rbx		; mask with 0001 1111 to kill high bits, only want 5
+	
 	mov byte [Result+rdi],al	; store in Result (rdi is offset, +1 each loop)
 	
 	inc rdi			; offset to store Result
