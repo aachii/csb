@@ -37,15 +37,15 @@ Read:
 	xor r8,r8		; count up later when character is 00 (end of input)
 	mov cl,35		; start of first 5 bits
 	
-Getbuff:	
-	mov al,byte [Buff+rsi]	; load 40 bits of data in rax
-	cmp al,0		; check if byte is 0000 0000
-	ja Cont			; if not continue
-	inc r8			; count up if read byte is 0
-Cont:
-	shl rax,8		; get the first 8 then shift by 8
+	mov al,byte [Buff]	; load 40 bits of data in rax
 	inc rsi
-	cmp rsi,4
+	
+Getbuff:	
+	shl rax,8		; shift to the next 8 bit
+	mov al,byte [Buff+rsi]	; load 40 bits of data in rax again
+	
+	inc rsi			; increase offset from buffer
+	cmp rsi,4		; detect if all 5 bytes are in or not
 	jb Getbuff
 	
 	mov rdx,rax		; keep a backup of the read buffer
