@@ -28,6 +28,10 @@ Read:
 	call ReadBuff		; Call ReadBuff
 	mov rbp,rax		; Save # of bytes read from file for later
 	cmp rax,0		; If eax=0, sys_read reached EOF on stdin
+	
+	cmp rbp,
+	
+	
 	je Done			; Jump If Equal (to 0, from compare)
 
 ; Get 5 bytes and translate from Table
