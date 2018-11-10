@@ -6,12 +6,13 @@
 SECTION .bss			; Section of uninitialised data
 	BUFFLEN	equ 5		; read the input 5 bytes
 	Buff: resb BUFFLEN	; Text buffer
+	; 5 bits from input is the offset in data for base32
+	RESLEN equ 8
+	Result: resb RESLEN
 	
 SECTION .data			; Section of initialised data
 	Table: db "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
 	TABLELEN equ $-Table
-	; 5 bits from input is the offset in data for base32
-	Result qw null
 	
 SECTION .text			; Section of code
 	
@@ -93,12 +94,12 @@ Translate:
 	mov byte [Result+rsi],cl	; put cl to Result
 	
 	inc rsi			; increase rsi for next Result value
-	cmp rsi,7		; same as above, exactly 8 rounds needed
+	cmp rsi,r8		; same as above, exactly 8 rounds needed
 	jna Translate		; loop if not yet completed
 	
 ; print out the result
 	mov rax,Result		; Specify sys_write call
-	mov rbx,8		; Specify File Descriptor 1: Standard output
+	mov rbx,RESLEN		; Specify File Descriptor 1: Standard output
 	call PrintString	; call PrintString
 	jmp Read		; Loop back and load file buffer again
 	
