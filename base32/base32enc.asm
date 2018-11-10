@@ -57,7 +57,6 @@ Cont:
 	mov rdx,rax		; keep a backup of the read buffer
 	mov rbx, 0x1F		; set 5 bit mask 0001 1111
 	xor rdi,rdi
-	mov Result, 0h
 
 ; Store the int value of the 5 pair bits in Result
 Storebits:
