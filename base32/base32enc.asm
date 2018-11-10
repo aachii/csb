@@ -45,8 +45,8 @@ Getbuff:
 	mov al,byte [Buff+rsi]	; load 40 bits of data in rax again
 	
 	cmp al,0
-	inc r8
 	ja Cont
+	inc r8
 	
 Cont:	
 	inc rsi			; increase offset from buffer
