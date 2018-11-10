@@ -11,7 +11,7 @@ SECTION .data			; Section of initialised data
 	Table: db "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
 	TABLELEN equ $-Table
 	; 5 bits from input is the offset in data for base32
-	Result qw ''
+	Result qw null
 	
 SECTION .text			; Section of code
 	
