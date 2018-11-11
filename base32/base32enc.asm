@@ -29,7 +29,7 @@ Read:
 	mov rbp,rax		; Save # of bytes read from file for later
 	cmp rax,0		; If eax=0, sys_read reached EOF on stdin	
 	je Done			; Jump If Equal (to 0, from compare)
-
+	
 ; Get 5 bytes and translate from Table
 	xor rsi,rsi
 	xor rdi,rdi
@@ -38,22 +38,58 @@ Read:
 	xor r8,r8		; count up later when character is 00 (end of input)
 	mov cl,35		; start of first 5 bits
 	
-	mov al,byte [Buff]	; load 40 bits of data in rax
+	mov al,byte [Buff]
 	inc rsi
+
+; Different cases that can occur at the end
+; either 1,2,3 or 4 bytes of zeros can occur (5 zeros would mean no buffer left)
+	cmp rbp,1
+	je Zero4
+	cmp rbp,2
+	je Zero3
+	cmp rbp,3
+	je Zero2
+	cmp rbp,4
+	je Zero1
+	jmp Getbuff
+
+Zero4:
+	shl rax,32		; rest is all 0
+	jmp SkipMid
+		
+Zero3:
+	shl rax,8		; read one more byte
+	mov al, byte [Buff+rsi]
+	shl rax,24		; rest is all 0
+	jmp SkipMid
+	
+Zero2:
+	shl rax,8		; read one more byte
+	mov al,byte [Buff+rsi]
+	inc rsi
+	cmp rsi,3		; read another byte if rsi is not 3
+	je Zero2
+	shl rax,16		; rest is all 0
+	jmp SkipMid
+	
+Zero1:
+	shl rax,8		; read one more byte
+	mov al,byte [Buff+rsi]
+	inc rsi
+	cmp rsi,4		; read another byte if rsi is not 4
+	je Zero2
+	shl rax,8		; rest is all 0
+	jmp SkipMid
+	
 	
 Getbuff:	
 	shl rax,8		; shift to the next 8 bit
 	mov al,byte [Buff+rsi]	; load 40 bits of data in rax again
-	
-	cmp al,0
-	ja Cont
-	inc r8
-	
-Cont:	
 	inc rsi			; increase offset from buffer
 	cmp rsi,5		; detect if all 5 bytes are in or not
 	jb Getbuff
-	
+
+SkipMid:
 	mov rdx,rax		; keep a backup of the read buffer
 	mov rbx, 0x1F		; set 5 bit mask 0001 1111
 	xor rdi,rdi
@@ -72,18 +108,7 @@ Storebits:
 	cmp rdi,7		; after 8 bytes we are done
 	jna Storebits		; loop if not above 7
 	
-	xor rsi,rsi		; clear rsi
-	
-	cmp r8,4		; 4 empty bytes at end
-	je Equiv1
-	cmp r8,3
-	je Equiv3
-	cmp r8,2
-	je Equiv4
-	cmp r8,1
-	je Equiv6
-	
-	mov r8,7	
+	xor rsi,rsi		; clear rsi	
 	
 Translate:
 	xor rbx,rbx		; clear rbx and rcx
@@ -94,7 +119,7 @@ Translate:
 	mov byte [Result+rsi],cl	; put cl to Result
 	
 	inc rsi			; increase rsi for next Result value
-	cmp rsi,r8		; same as above, exactly 8 rounds needed
+	cmp rsi,7		; same as above, exactly 8 rounds needed
 	jna Translate		; loop if not yet completed
 	
 ; print out the result
@@ -103,20 +128,6 @@ Translate:
 	call PrintString	; call PrintString
 	jmp Read		; Loop back and load file buffer again
 	
-; end of input cases for =
-Equiv1:
-	
-	jmp Translate		; go back
-Equiv3:
-	
-	jmp Translate		; go back
-Equiv4:
-	
-	jmp Translate		; go back
-Equiv6:
-	
-	jmp Translate		; go back
-
 ; Exit
 Done:
 	mov rax,1		; Code for Exit Syscall
