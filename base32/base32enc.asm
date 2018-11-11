@@ -11,7 +11,7 @@ SECTION .bss			; Section of uninitialised data
 	Result: resb RESLEN
 	
 SECTION .data			; Section of initialised data
-	Table: db "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
+	Table: db "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567="
 	TABLELEN equ $-Table
 	
 SECTION .text			; Section of code
@@ -38,7 +38,7 @@ Read:
 	xor r8,r8		; count up later when character is 00 (end of input)
 	mov cl,35		; start of first 5 bits
 	
-	mov al,byte [Buff]
+	mov al,byte [Buff]	; every scenario needs at least one byte read
 	inc rsi
 
 ; Different cases that can occur at the end
@@ -54,13 +54,15 @@ Read:
 	jmp Getbuff
 
 Zero4:
-	shl rax,32		; rest is all 0
+	shl rax,32
+	mov r8,2
 	jmp SkipMid
 		
 Zero3:
 	shl rax,8		; read one more byte
 	mov al, byte [Buff+rsi]
-	shl rax,24		; rest is all 0
+	shl rax,24
+	mov r8,4
 	jmp SkipMid
 	
 Zero2:
@@ -68,8 +70,9 @@ Zero2:
 	mov al,byte [Buff+rsi]
 	inc rsi
 	cmp rsi,3		; read another byte if rsi is not 3
-	je Zero2
-	shl rax,16		; rest is all 0
+	jb Zero2
+	shl rax,16
+	mov r8,5
 	jmp SkipMid
 	
 Zero1:
@@ -77,8 +80,9 @@ Zero1:
 	mov al,byte [Buff+rsi]
 	inc rsi
 	cmp rsi,4		; read another byte if rsi is not 4
-	je Zero2
-	shl rax,8		; rest is all 0
+	jb Zero1
+	shl rax,8
+	mov r8,7
 	jmp SkipMid
 	
 	
@@ -100,6 +104,14 @@ Storebits:
 	shr rax,cl		; shift to get 5 bits, cl-5 every loop
 	and rax,rbx		; mask with 0001 1111 to kill high bits, only want 5
 	
+; Equiv logic for end of buffer
+	cmp rbp,4
+	ja Cont
+	cmp rdi,r8
+	jb Cont
+	mov al,0x20
+
+Cont:
 	mov byte [Result+rdi],al	; store in Result (rdi is offset, +1 each loop)
 	
 	inc rdi			; offset to store Result
@@ -109,7 +121,7 @@ Storebits:
 	jna Storebits		; loop if not above 7
 	
 	xor rsi,rsi		; clear rsi	
-	
+
 Translate:
 	xor rbx,rbx		; clear rbx and rcx
 	xor rcx,rcx		; used for temp storage
@@ -127,7 +139,7 @@ Translate:
 	mov rbx,RESLEN		; Specify File Descriptor 1: Standard output
 	call PrintString	; call PrintString
 	jmp Read		; Loop back and load file buffer again
-	
+
 ; Exit
 Done:
 	mov rax,1		; Code for Exit Syscall
