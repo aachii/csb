@@ -8,8 +8,8 @@ int main() {
 	if (1 != scanf("%u", &n)) {
 		return 1;
 	}
-	count = n;
-	for (unsigned int i=2; count <= n ;i++) {
+	count = 0;
+	for (unsigned int i=2; count < n ;i++) {
 		bool i_is_prime = true;
 		int a = 2;
 		
