@@ -1,7 +1,7 @@
 ;  Executable name : base32enc
 ;  Created date    : 07.11.2018
 ;  Author          : Janick Stucki
-;  Description     : Encodes text to base32
+;  Description     : Encodes text to base32, makes newline every 76th character
 ;
 SECTION .bss			; Section of uninitialised data
 	BUFFLEN	equ 5		; read the input 5 bytes
