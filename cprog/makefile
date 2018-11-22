@@ -1,7 +1,7 @@
-all: circleArea upperCase bubbleSort primeTime
+all: circleArea upperCase bubbleSort primeTime typeOfChar primeFactor
 
 clean:
-	rm -f *.o *~ circleArea upperCase bubbleSort primeTime
+	rm -f *.o *~ circleArea upperCase bubbleSort primeTime typeOfChar primeFactor
 
 circleArea: circleArea.c
 	gcc circleArea.c -g -F dwarf -o circleArea
@@ -14,3 +14,9 @@ bubbleSort: bubbleSort.c
 
 primeTime: primeTime.c
 	gcc primeTime.c -g -F dwarf -o primeTime
+
+typeOfChar: typeOfChar.c
+	gcc typeOfChar.c -g -F dwarf -o typeOfChar
+
+primeFactor: primeFactor.c
+	gcc primeFactor.c -g -F dwarf -o primeFactor 
