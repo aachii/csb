@@ -1,0 +1,25 @@
+Makefile.am
+----
+bin_PROGRAMS = \
+hello
+hello_SOURCES = \
+hello.c
+
+-------------------------------
+apt-get install automake autoconf
+cd hello/
+autoscan
+mv configure.scan configure.ac
+------
+Edit configure.ac, adding AM_INIT_AUTOMAKE under “Checks for programs” and editing
+the AC_INIT line, replacing the arguments with the correct program information.
+
+Add also LT_INIT
+---
+touch NEWS README AUTHORS ChangeLog
+autoreconf -fi
+./configure --prefix=$HOME
+make
+./hello
+
+----
