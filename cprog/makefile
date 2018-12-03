@@ -1,7 +1,7 @@
-all: circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers
+all: circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers minimum
 
 clean:
-	rm -f *.o *~ circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers
+	rm -f *.o *~ circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers minimum
 
 circleArea: circleArea.c
 	gcc circleArea.c -g -F dwarf -o circleArea
@@ -23,3 +23,7 @@ primeFactor: primeFactor.c
 
 swapPointers: swapPointers.c
 	gcc swapPointers.c -g -F dwarf -o swapPointers
+
+minimum: minimum.c
+	gcc minimum.c -g -F dwarf -o minimum
+
