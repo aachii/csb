@@ -1,7 +1,7 @@
 all: base32enc base32dec
 
 clean:
-	rm *.o
+	rm *.o *.out *.want *.delta b32*
 
 base32enc.o: base32enc.asm
 	nasm -f elf64 -g -F dwarf base32enc.asm
