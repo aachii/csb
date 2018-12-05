@@ -140,7 +140,6 @@ Translate:
 	jne Nonl	; insert newline when 76th character
 	mov byte [Res9+rdi],0x0A
 	inc rdi		; also increase Result offset
-	;inc r8
 	xor r9,r9	; and reset newline counter
 	mov r10,8	; to read the correct amount of characters
 
