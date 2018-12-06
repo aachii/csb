@@ -7,10 +7,10 @@ SECTION .bss			; Section of uninitialised data
 	BUFFLEN	equ 5		; read the input 5 bytes
 	Buff: resb BUFFLEN	; Text buffer
 	; 5 bits from input is the offset in data for base32
-	RESLEN equ 8		; result for translated 5bit pairs
-	Result: resb RESLEN	; length of result
-	CHARLEN equ 1		; variable for printing char by char
-	Char: resb CHARLEN	; length of 1 char
+	RESLEN equ 8
+	Result: resb RESLEN
+	RESLEN9 equ 9		; 9 bytes needed for the
+	Res9: resb RESLEN9	; newline case on each 76th character
 	
 SECTION .data			; Section of initialised data
 	Table: db "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567="
@@ -25,6 +25,7 @@ _start:
 	
 ; counter for newline each 76th character
 	xor r9,r9	; newline counter
+	xor r10,r10	; used for either 8 or 9 result bytes
 
 ; Read a buffer from stdin:
 Read:
@@ -41,6 +42,7 @@ Read:
 	xor rax,rax	; working register
 	xor rcx,rcx	; shifting number to get 5 bits
 	xor r8,r8	; count up later when character is 00 (end of input)
+	mov r10,7	; standard length to read 0-7 (8 bytes)
 	mov cl,35	; start of first 5 bits (shifting)
 	
 	mov al,byte [Buff]	; every scenario needs at least one byte read
@@ -101,7 +103,7 @@ Getbuff:
 SkipMid:
 	mov rdx,rax	; keep a backup of the read buffer (contains 40 bits)
 	mov rbx, 0x1F	; set 5 bit mask 0001 1111
-	xor rdi,rdi	; reset destination index
+	xor rdi,rdi
 
 ; Store the int value of the 5 pair bits in Result
 Storebits:
@@ -120,49 +122,60 @@ Cont:
 	mov byte [Result+rdi],al; store in Result (rdi is offset, +1 each loop)
 	inc rdi			; offset to store Result
 	sub cl,5		; position of next 5 bit group is 5 less
-	cmp rdi,7		; after 8 bytes we are done
+	cmp rdi,r10		; after 8 bytes we are done
 	jna Storebits		; loop if not above 7
 	
 	xor rsi,rsi		; clear rsi
 	xor rdi,rdi		; and rdi
 
 Translate:
-	xor rax,rax		; translated char goes here
-	xor rcx,rcx		; used as 5bit pair offset
-	mov rbx,1		; length to print 1 char
+	xor rbx,rbx		; clear rbx and rcx
+	xor rcx,rcx		; used for temp storage
 	
-	cmp r9,76		; check if newline has to be printed, standard in base32
-	jne Nonl		; if not skip this part
-	mov byte [Char],0x0D	; CR
-	mov rax,Char
-	mov rbx,CHARLEN
-	call PrintString
-	mov byte [Char],0x0A	; LF
-	xor r9,r9
-	jmp SkipNormal		; CR LF is standard way of newline for windows / linux / mac
+	mov bl, byte [Result+rsi]	; get the first number from Result in bl
+	mov cl, byte [Table+rbx]	; translate the first number from Table into cl
+	
+; logic for printing newline
+	cmp r9,76
+	jne Nonl	; insert newline when 76th character
+	mov byte [Res9+rdi],0x0A
+	inc rdi		; also increase Result offset
+	xor r9,r9	; and reset newline counter
+	mov r10,8	; to read the correct amount of characters
 
-Nonl:
-	mov cl, byte [Result+rsi]	; get the first number from Result in cl
-	mov al, byte [Table+rcx]	; translate the first number from Table into al
-	mov byte [Char],al		; move to print variable
-	inc r9				; count one up for newline
-	inc rsi				; count source index to get next 5bit pair
+Nonl:			; jump here when no newline has to be set
+	cmp r10,7
+	jne ResOther	; when Result length is 9 fill Res9
+	mov byte [Result+rdi],cl	; put cl to Result
+	
+ResOther:
+	mov byte [Res9+rdi],cl	; put cl to Result
+	inc r9			; increase character counter for newline
+	inc rsi			; increase rsi for next Result value
+	inc rdi			; same for Result
+	cmp rdi,r10		; same as above, exactly 8 rounds needed
+	jna Translate		; loop if not yet completed
 
-SkipNormal:	
-	mov rax,Char		; put Char address to rax
-	mov rbx,CHARLEN		; length to rbx
-	call PrintString	; print translated char
-	
-	cmp rsi,8		; when all 8 are printed continue
-	jne Translate		; go back to translate more 5bit pairs
-	
-	jmp Read	; continue reading buffer
+; print out the result
+	cmp r10,8		; when 76th character was reached do this
+	jne Norm		; else jump to standard 8 byte print
+	mov rax,Res9		; where to read
+	mov rbx,RESLEN9		; how long to read
+	call PrintString	; call PrintString
+	jmp Read		; go back to read the buffer
+
+; Standard case when Result is 8 bytes long
+Norm:
+	mov rax,Result		; where to read
+	mov rbx,RESLEN		; how long to read
+	call PrintString	; call PrintString
+	jmp Read		; go back to read the buffer
 
 ; Exit
 Done:
-	mov rax,60	; Code for Exit Syscall
-	mov rdi,0	; Return a code of zero	
-	syscall
+	mov rax,1	; Code for Exit Syscall
+	mov rbx,0	; Return a code of zero	
+	int 0x80	; Make kernel call
 
 PrintString:
 	; Input:
@@ -171,24 +184,16 @@ PrintString:
 	; Output:
 	;  Prints eax to console
 	
-	push rcx	; store used registers to stack
+	push rcx	; store rcx and rdx to stack
 	push rdx
-	push rsi
-	push rdi
-	push r8
-	push r9
 	
-	mov rsi,rax	; input to correct register
+	mov rcx,rax	; input to correct register
 	mov rdx,rbx	; lenght to correct register
 	
-	mov rax,1	; Specify sys_write call
-	mov rdi,1	; Specify File Descriptor 1: Standard output
-	syscall
+	mov rax,4	; Specify sys_write call
+	mov rbx,1	; Specify File Descriptor 1: Standard output
+	int 0x80	; Make kernel call to display line string
 	
-	pop r9
-	pop r8
-	pop rdi
-	pop rsi
 	pop rdx		; get old values back from stack
 	pop rcx		; order is important! 1,2 2,1
 	
@@ -201,11 +206,11 @@ ReadBuff:
 	; Output:
 	;  rax -> number of read input
 
-	mov rsi,rax	; input to correct register
+	mov rcx,rax	; input to correct register
 	mov rdx,rbx	; length to correct register
 
-	mov rax,0	; Specify sys_read call
-	mov rdi,0	; Specify File Descriptor 0: Standard Input
-	syscall
+	mov rax,3	; Specify sys_read call
+	mov rbx,0	; Specify File Descriptor 0: Standard Input
+	int 0x80	; Call sys_read to fill the buffer
 
 	ret	; end of ReadBuff
