@@ -28,10 +28,10 @@ void minimax(int *array, int size, int *min, int *max) {
 	*max = *array;
 	for(int i = 1; i < size; i++) { // loop and see if there are smaller numbers
 		if (*(array+i) < *min) {
-			*min = *array;
+			*min = *(array+i);
 		}
 		if (*(array+i) > *max) {
-			*max = *array;
+			*max = *(array+i);
 		}
 	}
 }
