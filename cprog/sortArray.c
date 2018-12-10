@@ -36,7 +36,7 @@ void sort(int size, char* x[]){
 	for (int i=0; i<size; size--) {
 		for (int i=0; i<size; i++) {
 			//if (*(x+i)[0] > *(x+i+1)[0]) {
-			if (strcmp(*(x+i), *(x+i+1))) {
+			if (strcmp(*(x+i), *(x+i+1)) > 0) {
 				char *temp = *(x+i);
 				*(x+i) = *(x+i+1);
 				*(x+i+1) = temp;
