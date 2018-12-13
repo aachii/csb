@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define my_new(t) (t*) malloc (sizeof (t))
 #define MAXSIZE 12
 
 struct Car {
@@ -9,21 +10,24 @@ struct Car {
 	char     type[10];
 	long int id;
 	double   price;
+	struct   Car *next;
 };
 
 int main(){
-  int res;
-  struct Car car[10];
-  int i = 0;
+  int res; 
+  struct Car *first;
+  first = NULL;
 
   do{
-    res = scanf("%s %s %ld %lf", car[i].brand, car[i].type, &car[i].id, &car[i].price);
-    i++;
+    struct Car *newfirst = my_new(struct Car);
+    res = scanf("%s %s %ld %lf", newfirst->brand, newfirst->type, &newfirst->id, &newfirst->price);
+    newfirst->next=first;
+    first=newfirst;
   }while(res != EOF);
-  i--;
   
-  for(int n=0;n<i;n++){
-	printf("Brand: %s   Type: %49s   ID: %ld   Price: %f\n", car[n].brand, car[n].type, car[n].id, car[n].price);
-  }
-  
+  do{
+	first=first->next;
+	printf("Brand: %s   Type: %49s   ID: %ld   Price: %f\n", first->brand, first->type, first->id, first->price);
+  }while(first->next!=NULL);
+  return 0;
 }
