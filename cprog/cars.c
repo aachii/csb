@@ -3,7 +3,6 @@
 #include <string.h>
 
 #define my_new(t) (t*) malloc (sizeof (t))
-#define MAXSIZE 12
 
 struct Car {
 	char     brand[10];
