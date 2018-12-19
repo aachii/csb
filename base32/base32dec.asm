@@ -89,17 +89,16 @@ Printit:	; print 5 bytes
 	jne Printit	; print next if no match
 	
 	xor rcx,rcx	; clear registers to work with in next buffer round
-	xor rdx,rdx
-	xor rsi,rsi
 	xor rdi,rdi
 	xor r8,r8
+	xor r10,r10
 	
 	jmp Read	; continue read buffer
 	
 Done:
-	mov rsi,Newline
-	mov rdx,2
-	call PrintString
+	;mov rsi,Newline
+	;mov rdx,2
+	;call PrintString
 	mov rax,60	; Code for Exit Syscall
 	mov rdi,0	; Return a code of zero	
 	syscall
