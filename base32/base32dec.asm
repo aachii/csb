@@ -72,8 +72,8 @@ Translate:
 	
 	jmp Printit	; default case is no =
 	
-Equiv6: add rdi,8	; print 1 byte  6 = has to stop after 1 printed byte -> need 32
-Equiv4: add rdi,8	; print 2 bytes 4 = has to stop after 2 printed bytes -> need 24
+Equiv6: add rdi,8	; print 1 byte  6 = has to stop after 1 printed byte  -> need 32
+Equiv4: add rdi,8	; print 2 bytes 4 = has to stop after 2 printed bytes -> 24
 Equiv3: add rdi,8	; print 3 bytes 3 = has to stop after 3 printed bytes -> 16
 Equiv1: add rdi,8	; print 4 bytes 1 = has to stop after 4 printed bytes -> 8
 	
@@ -96,9 +96,9 @@ Printit:	; print 5 bytes
 	jmp Read	; continue read buffer
 	
 Done:
-	mov rsi,Newline
-	mov rdx,2
-	call PrintString
+	;mov rsi,Newline
+	;mov rdx,2
+	;call PrintString
 	mov rax,60	; Code for Exit Syscall
 	mov rdi,0	; Return a code of zero	
 	syscall
