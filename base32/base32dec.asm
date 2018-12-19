@@ -96,9 +96,9 @@ Printit:	; print 5 bytes
 	jmp Read	; continue read buffer
 	
 Done:
-	;mov rsi,Newline
-	;mov rdx,2
-	;call PrintString
+	mov rsi,Newline
+	mov rdx,2
+	call PrintString
 	mov rax,60	; Code for Exit Syscall
 	mov rdi,0	; Return a code of zero	
 	syscall
