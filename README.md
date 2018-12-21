@@ -1,17 +1,6 @@
-+-------------+
-
-| Description |
-
-+-------------+
-
+Description:
 exercices from computer science basics course @bfh
 
-
-+-------------+
-
-|  Languages  |
-
-+-------------+
-
+Languages:
 - Assembly x86
 - C
