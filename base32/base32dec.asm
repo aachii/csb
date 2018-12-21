@@ -1,4 +1,4 @@
-;  Executable name : base32enc
+;  Executable name : base32dec
 ;  Created date    : 07.11.2018
 ;  Author          : Janick Stucki
 ;  Description     : Decodes base32 to text
@@ -21,7 +21,6 @@ GLOBAL 	_start		; Start point for linker
 _start:
 	nop		; This no-op keeps gdb happy...
 	
-; Read a buffer from stdin:
 Read:
 	mov rsi,Buff		; Offset of Buffer to rax
 	mov rdx,BUFFLEN		; Number of bytes to read to rbx
@@ -96,9 +95,9 @@ Printit:	; print 5 bytes
 	jmp Read	; continue read buffer
 	
 Done:
-	;mov rsi,Newline
-	;mov rdx,2
-	;call PrintString
+	;mov rsi,Newline	; print newline at end
+	;mov rdx,2	; for prettier output
+	;call PrintString	; commented because test script failing with this newline
 	mov rax,60	; Code for Exit Syscall
 	mov rdi,0	; Return a code of zero	
 	syscall

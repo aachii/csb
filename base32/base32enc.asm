@@ -20,7 +20,6 @@ GLOBAL 	_start		; Start point for linker
 _start:
 	nop		; This no-op keeps gdb happy...
 
-; Read a buffer from stdin:
 Read:
 	mov rsi,Buff		; Offset of Buffer to eax
 	mov rdx,BUFFLEN		; Number of bytes to read to ebx
@@ -98,7 +97,7 @@ SkipEquiv:
 
 Done:			; when buffer read 0 bytes
 	mov rsi,Newline	; print newline at end
-	mov rdx,2
+	mov rdx,2	; for prettier output
 	call PrintString
 	mov rax,60	; Code for Exit Syscall
 	mov rdi,0	; Return a code of zero	
