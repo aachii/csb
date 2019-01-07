@@ -1,7 +1,7 @@
-all: circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers minimum sortArray cars
+all: circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers minimum sortArray cars threads
 
 clean:
-	rm -f *.o *~ circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers minimum sortArray cars
+	rm -f *.o *~ circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers minimum sortArray cars threads threads
 
 circleArea: circleArea.c
 	gcc circleArea.c -g -F dwarf -o circleArea
@@ -32,3 +32,6 @@ sortArray: sortArray.c
 
 cars: cars.c
 	gcc cars.c -g -F dwarf -o cars
+
+threads: threads.c
+	gcc threads.c -g -lm -lpthread -F dwarf -o threads
