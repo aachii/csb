@@ -1,7 +1,7 @@
-all: circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers minimum sortArray cars threads
+all: circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers minimum sortArray cars threads shelly
 
 clean:
-	rm -f *.o *~ circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers minimum sortArray cars threads threads
+	rm -f *.o *~ circleArea upperCase bubbleSort primeTime typeOfChar primeFactor swapPointers minimum sortArray cars threads threads shelly
 
 circleArea: circleArea.c
 	gcc circleArea.c -g -F dwarf -o circleArea
@@ -35,3 +35,6 @@ cars: cars.c
 
 threads: threads.c
 	gcc threads.c -g -lm -lpthread -F dwarf -o threads
+
+shelly: shelly.c
+	gcc shelly.c -g -lm -lpthread -F dwarf -o shelly
