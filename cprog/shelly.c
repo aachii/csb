@@ -13,21 +13,25 @@ int main() {
 			break;
 		}
 		pid_t pid = fork();
+		if (-1 == pid) {
+			printf("Error pid -1");
+		}
 		if (0 == pid) {
 			printf("child process => %s", input);
 			char *array[10];
 			char s[]=" ";
+			int len = strlen(input);
+			input[len-1]='\0';
 			char * token = strtok(input, s);
-			char *command = token;
 			int length = 0;
+			array[length] = token;
 			while (NULL != token) {
 				token = strtok(NULL, s);
-				array[length++] = token;
+				array[++length] = token;
 				printf("token: %s\n", token);	
 			}
 			array[length]=NULL;
-
-			execv(command, array);
+			execv(array[0], array);
 			break;
 		} else {
 			int status;
