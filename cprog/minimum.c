@@ -1,7 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int minimum(int *a, int size);
 void minimax(int *array, int size, int *min, int *max);
+
+struct Foo {
+	struct Foo *n; int val;
+};
+
 int main() {
 	int array[]={34,54,2,43,78};
 	int mini = minimum(array,5);
@@ -9,7 +15,25 @@ int main() {
 	int min;
 	int max;
 	minimax(array,5,&min,&max);
-	printf("min = %d  max = %d\n", min, max);
+	printf("min = %d  max = %d\n\n", min, max);
+	
+	struct Foo *p = malloc(sizeof (struct Foo));
+	struct Foo f = {
+		.n = p,
+		.val = 1
+	};
+	p->val = 5;
+	for (p=&f;NULL != p;p=p->n) {
+		printf ("%d\n", p->val);
+	}
+	
+	char c = -1;
+	printf("%u\n", (int) c);
+	
+	union{unsigned int i; float f;} u;
+	u.f = -0.1;
+	printf("%X\n", u.i);
+
 	return 0;
 }
 
