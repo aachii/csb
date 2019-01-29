@@ -8,6 +8,10 @@ struct Foo {
 	struct Foo *n; int val;
 };
 
+void add_four(int *a) {
+	*a += 4;
+}
+
 int main() {
 	int array[]={34,54,2,43,78};
 	int mini = minimum(array,5);
@@ -28,11 +32,16 @@ int main() {
 	}
 	
 	char c = -1;
-	printf("%u\n", (int) c);
+	printf("Char as int: %u\n", (int) c);
 	
 	union{unsigned int i; float f;} u;
 	u.f = -0.1;
-	printf("%X\n", u.i);
+	printf("Int: %d\n", u.i);
+	printf("Hex: %X\n", u.i);
+
+	int b = 5;
+	add_four(&b);
+	printf("b: %d\n", b);
 
 	return 0;
 }
